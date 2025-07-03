@@ -1,0 +1,44 @@
+services:
+  dvwa:
+    image: vulnerables/web-dvwa:latest
+    ports:
+      - "8080:80"  # DVWA runs on port 80 inside container
+    environment:
+      - MYSQL_HOSTNAME=mysql
+      - MYSQL_DATABASE=dvwa
+      - MYSQL_USERNAME=dvwa
+      - MYSQL_PASSWORD=p@ssw0rd
+    depends_on:
+      - mysql
+    networks:
+      - lab-network
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=p@ssw0rd
+      - MYSQL_DATABASE=dvwa
+      - MYSQL_USER=dvwa
+      - MYSQL_PASSWORD=p@ssw0rd
+    networks:
+      - lab-network
+
+  opa:
+    image: openpolicyagent/opa:latest
+    command:
+      - "run"
+      - "--server"
+      - "--addr=0.0.0.0:8181"
+      - "--log-level=debug"
+      - "--watch"  # Important: enables auto-reload of policies
+      - "/policies"  # Mount directory, not single file
+    volumes:
+      - ./policies:/policies  # Mount policies directory
+    ports:
+      - "8181:8181"  # Map host 8181 to container 8181
+    networks:
+      - lab-network
+
+networks:
+  lab-network:
+    driver: bridge
