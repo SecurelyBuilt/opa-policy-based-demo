@@ -1,36 +1,35 @@
 A security testing lab that demonstrates policy-based access control using Open Policy Agent (OPA) with Damn Vulnerable Web Application (DVWA). This project showcases how to implement external authorization policies for web applications using containerized services.
-🏗️ Architecture Overview
+
+# Architecture Overview
+
 This lab consists of three main components:
 
 DVWA: A deliberately vulnerable web application for security testing
 MySQL: Database backend for DVWA
 OPA: Open Policy Agent for policy-based authorization decisions
 
-📋 Prerequisites
+# 📋 Prerequisites
 
 Docker and Docker Compose installed
 Basic understanding of REST APIs
 Familiarity with JSON and policy concepts
 
-🚀 Quick Start
+# 🚀 Quick Start
 
 Clone the repository
-bashgit clone <your-repo-url>
+git clone securederek/opa-policy-based-demo
 cd dvwa-opa-lab
 
 Create the policies directory
-bashmkdir -p policies
+mkdir -p policies
 
 Add the policy file
-
 Copy the policy.rego file to the policies/ directory
 
-
 Start the lab environment
-bashdocker-compose up -d
+docker-compose up -d
 
 Verify services are running
-bash# Check all services
 docker-compose ps
 
 # Check OPA health
@@ -40,8 +39,10 @@ curl http://localhost:8181/health
 curl http://localhost:8080
 
 
-🐳 Docker Compose Configuration
+# 🐳 Docker Compose Configuration
+
 Services Breakdown
+
 DVWA (Damn Vulnerable Web Application)
 yamldvwa:
   image: vulnerables/web-dvwa:latest
@@ -58,6 +59,7 @@ yamldvwa:
     - lab-network
 Purpose: Provides a vulnerable web application for testing security policies
 Access: http://localhost:8080
+
 MySQL Database
 yamlmysql:
   image: mysql:5.7
@@ -70,6 +72,7 @@ yamlmysql:
     - lab-network
 Purpose: Database backend for DVWA
 Access: Internal only (no external ports exposed)
+
 OPA (Open Policy Agent)
 yamlopa:
   image: openpolicyagent/opa:latest
@@ -93,7 +96,8 @@ Network Configuration
 lab-network: Bridge network enabling inter-service communication
 All services can communicate using service names as hostnames
 
-📜 Policy Documentation
+# 📜 Policy Documentation
+
 Current Policy (policy.rego)
 regopackage dvwa.login
 
@@ -113,28 +117,30 @@ decision := {
     "allow": allow,
     "user": input.username
 }
-Policy Behavior
-✅ Allows
 
+# Policy Behavior
+Allows
 Username: admin with Password: password
 Only this exact combination will return "allow": true
 
-❌ Blocks
-
+Blocks
 Any other username/password combination
 Missing username or password fields
 Empty or null values
 All other authentication attempts (default deny)
 
-📊 Response Format
+Response Format
 json{
   "result": {
     "allow": true/false,
     "user": "<input_username>"
   }
 }
-🧪 Testing the Policy
-Method 1: Using curl
+
+
+# 🧪 Testing the Policy
+# Method 1: Using curl
+
 Test Valid Credentials
 bashcurl -X POST http://localhost:8181/v1/data/dvwa/login/decision \
   -H "Content-Type: application/json" \
@@ -151,6 +157,7 @@ json{
     "user": "admin"
   }
 }
+
 Test Invalid Credentials
 bashcurl -X POST http://localhost:8181/v1/data/dvwa/login/decision \
   -H "Content-Type: application/json" \
@@ -167,6 +174,7 @@ json{
     "user": "hacker"
   }
 }
+
 Test Missing Fields
 bashcurl -X POST http://localhost:8181/v1/data/dvwa/login/decision \
   -H "Content-Type: application/json" \
@@ -182,16 +190,13 @@ json{
     "user": "admin"
   }
 }
-Method 2: Using Postman
-Setup
 
+# Method 2: Using Postman
+Setup
 Create a new POST request
 Set URL: http://localhost:8181/v1/data/dvwa/login/decision
 Set Headers:
-
 Content-Type: application/json
-
-
 
 Test Case 1: Valid Login
 Request Body (JSON):
@@ -208,6 +213,7 @@ json{
     "user": "admin"
   }
 }
+
 Test Case 2: Invalid Username
 Request Body (JSON):
 json{
@@ -223,6 +229,7 @@ json{
     "user": "wronguser"
   }
 }
+
 Test Case 3: Invalid Password
 Request Body (JSON):
 json{
@@ -238,15 +245,20 @@ json{
     "user": "admin"
   }
 }
-🔍 Monitoring and Debugging
+
+# 🔍 Monitoring and Debugging
+
 View OPA Logs
-bashdocker-compose logs opa
+docker-compose logs opa
+
 Check Loaded Policies
-bashcurl http://localhost:8181/v1/policies
+curl http://localhost:8181/v1/policies
+
 View All Available Data
-bashcurl http://localhost:8181/v1/data
+curl http://localhost:8181/v1/data
+
 Check Service Status
-bash# All services
+# All services
 docker-compose ps
 
 # OPA health check
@@ -254,35 +266,39 @@ curl http://localhost:8181/health
 
 # MySQL connection (from inside network)
 docker-compose exec dvwa mysql -h mysql -u dvwa -p
-🛠️ Troubleshooting
+
+# 🛠️ Troubleshooting
 Common Issues
-1. OPA Returns Empty Response
+# 1. OPA Returns Empty Response
 Problem: Policy not loaded or syntax error
 Solution:
-bash# Check OPA logs
+
 docker-compose logs opa
 
-# Verify policy syntax
+Verify policy syntax
 docker-compose exec opa opa fmt policies/policy.rego
-2. Cannot Connect to Services
+
+# 2. Cannot Connect to Services
 Problem: Services not fully started
 Solution:
-bash# Wait for services to initialize
+Wait for services to initialize
 docker-compose up -d
 sleep 30
 
-# Check service health
+Check service health
 curl http://localhost:8181/health
 curl http://localhost:8080
-3. Policy Changes Not Applied
+
+# 3. Policy Changes Not Applied
 Problem: Policy file not mounted correctly
 Solution:
-bash# Ensure policy is in correct location
+Ensure policy is in correct location
 ls -la policies/
 
-# Restart OPA to reload
+Restart OPA to reload
 docker-compose restart opa
-🔧 Extending the Lab
+
+# 🔧 Extending the Lab
 Adding More Complex Policies
 The current policy can be extended to include:
 
@@ -293,8 +309,8 @@ Time-based access controls
 IP address restrictions
 Failed attempt tracking
 
-Example Enhanced Policy
-rego# Add to policy.rego for more complex rules
+# Example Enhanced Policy
+Add to policy.rego for more complex rules
 valid_users := {"admin", "user1", "testuser"}
 
 allow if {
@@ -302,14 +318,15 @@ allow if {
     count(input.password) >= 8
     input.failed_attempts < 5
 }
-📚 Learning Resources
+
+# 📚 Learning Resources
 
 OPA Documentation
 Rego Language Guide
 DVWA Documentation
 Docker Compose Reference
 
-🔒 Security Notes
+# 🔒 Security Notes
 ⚠️ This is a lab environment for educational purposes only
 
 Uses default/weak credentials intentionally
