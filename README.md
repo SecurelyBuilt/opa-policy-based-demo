@@ -1,3 +1,7 @@
+## 🤝 Contributing
+
+Please fork the repo and submit pull requests to the `dev` branch. We review and merge into `main` after testing.
+
 A security testing lab that demonstrates policy-based access control using Open Policy Agent (OPA) with Damn Vulnerable Web Application (DVWA). This project showcases how to implement external authorization policies for web applications using containerized services.
 
 # Architecture Overview
