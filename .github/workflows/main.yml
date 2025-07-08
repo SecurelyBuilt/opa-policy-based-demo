@@ -1,0 +1,22 @@
+# .github/workflows/auto-approve.yml
+name: Auto Approve PRs
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-approve:
+    if: |
+      github.event.issue.pull_request &&
+      github.event.comment.body == '-APPROVE-' &&
+      github.event.comment.user.login == github.repository_owner
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto approve PR
+        uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
