@@ -1,0 +1,126 @@
+{
+  "bomFormat" : "CycloneDX",
+  "specVersion" : "1.5",
+  "serialNumber" : "urn:uuid:63d59d4a-564f-46cd-95c0-24e5cd974ae0",
+  "version" : 1,
+  "metadata" : {
+    "timestamp" : "2025-07-22T17:33:54Z",
+    "tools" : [
+      {
+        "vendor" : "OWASP",
+        "name" : "Dependency-Track",
+        "version" : "4.13.2"
+      }
+    ],
+    "component" : {
+      "type" : "application",
+      "bom-ref" : "e7bf3eb5-58ca-4874-bd60-27bdb8df3956",
+      "author" : "Björn Kimminich",
+      "name" : "op test",
+      "version" : "1",
+      "purl" : "pkg:npm/juice-shop@14.1.1?vcs_url=git%2Bhttps%3A%2F%2Fgithub.com%2Fjuice-shop%2Fjuice-shop.git",
+      "externalReferences" : [
+        {
+          "type" : "issue-tracker",
+          "url" : "https://github.com/juice-shop/juice-shop/issues",
+          "comment" : "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "type" : "vcs",
+          "url" : "git+https://github.com/juice-shop/juice-shop.git",
+          "comment" : "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "type" : "website",
+          "url" : "https://owasp-juice.shop",
+          "comment" : "as detected from PackageJson property \"homepage\""
+        }
+      ]
+    }
+  },
+  "components" : [
+    {
+      "type" : "library",
+      "bom-ref" : "f2471ef0-165a-4345-9a3b-dab803f6c614",
+      "author" : "TJ Holowaychuk",
+      "name" : "send",
+      "version" : "0.18.0",
+      "description" : "Better streaming static file server with Range and conditional-GET support",
+      "hashes" : [
+        {
+          "alg" : "SHA-512",
+          "content" : "aaa5b3b8e8d214ebaa3e315ee0d3ac30b69f4e8410c0148e1294be17012ddc0d95def2ae6d3aae4f7be62d3429160317a7c02515616e3f5a8a68964eb4fa555e"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "MIT"
+          }
+        }
+      ],
+      "purl" : "pkg:npm/send@0.18.0",
+      "externalReferences" : [
+        {
+          "type" : "distribution",
+          "url" : "https://registry.npmjs.org/send/-/send-0.18.0.tgz",
+          "comment" : "as detected from npm-ls property \"resolved\""
+        },
+        {
+          "type" : "issue-tracker",
+          "url" : "https://github.com/pillarjs/send/issues",
+          "comment" : "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "type" : "vcs",
+          "url" : "git+https://github.com/pillarjs/send.git",
+          "comment" : "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "type" : "website",
+          "url" : "https://github.com/pillarjs/send#readme",
+          "comment" : "as detected from PackageJson property \"homepage\""
+        }
+      ],
+      "properties" : [
+        {
+          "name" : "cdx:npm:package:path",
+          "value" : "node_modules/send"
+        }
+      ]
+    }
+  ],
+  "vulnerabilities" : [
+    {
+      "bom-ref" : "7599e49e-b05b-4e66-8eac-b1ee9bcc073c",
+      "id" : "CVE-2024-43799",
+      "source" : {
+        "name" : "NVD",
+        "url" : "https://nvd.nist.gov/"
+      },
+      "ratings" : [
+        {
+          "source" : {
+            "name" : "NVD",
+            "url" : "https://nvd.nist.gov/"
+          },
+          "score" : 4.7,
+          "severity" : "critical",
+          "method" : "CVSSv3",
+          "vector" : "CVSS:3.0/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        }
+      ],
+      "cwes" : [
+        79
+      ],
+      "description" : "Send is a library for streaming files from the file system as a http response. Send passes untrusted user input to SendStream.redirect() which executes untrusted code. This issue is patched in send 0.19.0.",
+      "published" : "2024-09-10T15:15:00Z",
+      "updated" : "2024-09-20T16:57:00Z",
+      "affects" : [
+        {
+          "ref" : "f2471ef0-165a-4345-9a3b-dab803f6c614"
+        }
+      ]
+    }
+  ]
+}
